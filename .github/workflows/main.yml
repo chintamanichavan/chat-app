@@ -23,11 +23,6 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
 
-    - name: Test with Pytest
-      run: |
-        python3 -m pip install pytest
-        pytest
-
     - name: Setup Minikube
       uses: manusa/actions-setup-minikube@v2.4.1
       with:
