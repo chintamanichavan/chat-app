@@ -6,8 +6,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -37,4 +36,3 @@ jobs:
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f deployment.yaml
-
