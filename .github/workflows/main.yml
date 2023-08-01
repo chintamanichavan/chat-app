@@ -27,8 +27,7 @@ jobs:
       with:
         minikube version: 'v1.24.0'
         kubernetes version: 'v1.23.0'
-        start args: '--driver=docker'
-        extra-start-args: '--force'  # Added extra-start-args with '--force' flag
+        start args: '--driver=docker --force'
 
     - name: Build Docker image
       run: |
