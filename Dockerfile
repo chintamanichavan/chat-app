@@ -1,16 +1,37 @@
 # Stage 1 - Angular Build
-FROM node:14 as angular-build
+
+# ---- Base Node ----
+FROM ubuntu:20.04 AS build-stage   
+
 WORKDIR /usr/src/app
-COPY ./angular-chat/ /usr/src/app/  # Using 'angular-chat' directory
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y curl gnupg2 ca-certificates lsb-release nodejs npm
+
+COPY ./angular-chat/ /usr/src/app/
+
 RUN npm install
 RUN npm run build --prod
 
-# Stage 2 - Django Setup
-FROM python:3.9 as django-build
+# Stage 2 - Django Build
+# ---- Base Python ----
+FROM python:3.9
+
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
 WORKDIR /code
-COPY ./django_chat/requirements.txt /code/ # Using 'django_chat' directory
+
+# ---- Copy Files/Build ----
+# Copy the Django static files from the build-stage
+COPY --from=build-stage /usr/src/app/dist/chat-app /usr/share/nginx/html
+
+# Copy the Django requirements and install them
+COPY ./django_chat/requirements.txt /code/
 RUN pip install -r requirements.txt
-COPY ./django_chat /code/
+
+# Copy the rest of the Django application
+COPY ./django_chat/ /code/
 
 # Stage 3 - Nginx server for Angular static files
 FROM nginx:ubuntu
