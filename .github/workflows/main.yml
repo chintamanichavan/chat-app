@@ -31,7 +31,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build . --file Dockerfile2 --tag image_name:${{ github.sha }}
+        docker build . --file Dockerfile --tag image_name:${{ github.sha }}
 
     - name: Deploy to Kubernetes
       run: |
