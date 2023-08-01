@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y curl gnupg2 ca-certificates lsb-release 
 # Install Node.js v14.x
-RUN curl -sL https://deb.nodesource.com/setup_14.16 | bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
 COPY ./angular-chat/ /usr/src/app/
 RUN npm install
