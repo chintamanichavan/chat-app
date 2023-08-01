@@ -1,7 +1,16 @@
 # Stage 1
-FROM node:14 as node
+FROM ubuntu:20.04 as build-stage
+
 WORKDIR /usr/src/app
+
+# Set noninteractive environment to prevent dialog asking questions
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update and install dependencies
+RUN apt-get update && apt-get install -y curl gnupg2 ca-certificates lsb-release nodejs npm
+
 COPY ./ /usr/src/app/
+
 RUN npm install
 RUN npm run build --prod
 
@@ -25,7 +34,7 @@ RUN apt-get update && \
     apt-get install -y nginx
 
 VOLUME /var/cache/nginx
-COPY --from=node /usr/src/app/dist/chat-app /usr/share/nginx/html
+COPY --from=build-stage /usr/src/app/dist/chat-app /usr/share/nginx/html
 COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
